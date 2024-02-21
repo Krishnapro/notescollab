@@ -15,7 +15,7 @@ public class UserRepository {
     private static final String GET_USER_BYID_QUERY = "";
 
     public User getUserById(int userId){
-        return "";
+        return null;
     }
 
 }
