@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationObservationContext;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,9 +31,10 @@ public class UserController {
         return "Hello world! Spring Boot Rest API";
     }
     @GetMapping("/getuserdetails/{userid}")
-    @PreAuthorize ("hasAuthority('ROLE_USER')")
+    @PreAuthorize ("hasRole('ROLE_USER')")
     public User getUserDetails(@PathVariable("userid") Long userid) throws Exception {
         try {
+
             logger.info ( "Getting user details..." + userid );
             return userRepository.getUserById ( userid );
         }catch (Exception e){
