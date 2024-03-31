@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -36,7 +37,12 @@ public class SecurityConfig {
                         .anyRequest ()
                         .authenticated ())
                 .httpBasic ( Customizer.withDefaults ())
-                .formLogin (Customizer.withDefaults ()).csrf ( AbstractHttpConfigurer::disable );
+                .formLogin (Customizer.withDefaults ()).csrf ( AbstractHttpConfigurer::disable )
+                .exceptionHandling (exception -> exception
+                        .accessDeniedHandler ( (request, response, accessDeniedException) -> {
+                    response.setStatus ( HttpStatus.FORBIDDEN.value());
+                    response.getWriter ().write ( "Access Denied" );
+                } ));
 
         return http.build();
 
