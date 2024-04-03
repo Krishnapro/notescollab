@@ -1,4 +1,5 @@
 ## notescollab
+This project is a backed application to create and share notes with friends. It used Java and SpringBoot for the backend and PostgreSql for the database.
 
 ## Prerequisites to Setups project locally:
 1. Java 17 or above
