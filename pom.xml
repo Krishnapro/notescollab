@@ -57,17 +57,17 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
-<!--			<version>${jwt.version}</version>-->
+&lt;!&ndash;			<version>${jwt.version}</version>&ndash;&gt;
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
-<!--			<version>${jwt.version}</version>-->
+&lt;!&ndash;			<version>${jwt.version}</version>&ndash;&gt;
 			<scope>runtime</scope>
-		</dependency>
+		</dependency>-->
 
 	</dependencies>
 
