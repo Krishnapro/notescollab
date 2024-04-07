@@ -38,11 +38,7 @@ public class SecurityConfig {
                         .authenticated ())
                 .httpBasic ( Customizer.withDefaults ())
                 .formLogin (Customizer.withDefaults ()).csrf ( AbstractHttpConfigurer::disable )
-                .exceptionHandling (exception -> exception
-                        .accessDeniedHandler ( (request, response, accessDeniedException) -> {
-                    response.setStatus ( HttpStatus.FORBIDDEN.value());
-                    response.getWriter ().write ( "Access Denied" );
-                } ));
+                .exceptionHandling (Customizer.withDefaults ());
 
         return http.build();
 

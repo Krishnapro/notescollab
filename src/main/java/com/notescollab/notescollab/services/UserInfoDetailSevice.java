@@ -1,12 +1,13 @@
 package com.notescollab.notescollab.services;
 
-import com.notescollab.notescollab.entity.User;
+import com.notescollab.notescollab.entity.MyUser;
 import com.notescollab.notescollab.entity.UserInfoAuth;
 import com.notescollab.notescollab.repository.UserRepository;
 import com.notescollab.notescollab.repository.UserSecurityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,11 +30,18 @@ public class UserInfoDetailSevice implements UserDetailsService {
 
         logger.info("Loading user:: load user by username"+username);
 
-        Optional<User> userInfo = userSecurityRepository.findByUsername(username);
-//        Optional<User> userInfo = userRepository.findByUsername(username);
+        Optional<MyUser> userInfo = userSecurityRepository.findByUsername(username);
+//        Optional<MyUser> userInfo = userRepository.findByUsername(username);
         logger.info ( "user detail "+userInfo );
-        logger.info ( "user password ====="+userInfo.get().getPassword () );
-        return userInfo.map( UserInfoAuth:: new).orElseThrow (() ->
-                new UsernameNotFoundException ( "user not found" + username ));
+        if(userInfo.isPresent ()){
+            MyUser user = userInfo.get ();
+            logger.info ( "user password ====="+user.getPassword () );
+
+            return new UserInfoAuth ( user );
+        }else {
+            logger.info ( "Got Exception while authenticate user: "+username);
+            throw new UsernameNotFoundException ("MyUser not found"+username );
+        }
+
     }
 }

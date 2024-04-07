@@ -15,7 +15,7 @@ public class UserInfoAuth implements UserDetails {
     private String password;
     private List<GrantedAuthority> authorities;
 
-    public UserInfoAuth(User user ){
+    public UserInfoAuth(MyUser user ){
         username = user.getUsername ();
         password = user.getPassword ();
         authorities = Arrays.stream (user.getRoles ().split ( "," ))
