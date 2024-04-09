@@ -1,5 +1,6 @@
 package com.notescollab.notescollab.entity;
 
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,11 +12,14 @@ import java.util.stream.Collectors;
 
 public class UserInfoAuth implements UserDetails {
 
+    @Getter
+    private Long userid;
     private String username;
     private String password;
     private List<GrantedAuthority> authorities;
 
     public UserInfoAuth(MyUser user ){
+        userid = user.getUserid ();
         username = user.getUsername ();
         password = user.getPassword ();
         authorities = Arrays.stream (user.getRoles ().split ( "," ))

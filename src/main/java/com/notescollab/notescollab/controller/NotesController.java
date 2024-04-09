@@ -2,14 +2,20 @@ package com.notescollab.notescollab.controller;
 
 import com.notescollab.notescollab.entity.MyUser;
 import com.notescollab.notescollab.entity.NotesDetails;
+import com.notescollab.notescollab.entity.UserInfoAuth;
 import com.notescollab.notescollab.repository.NotesRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api")
@@ -21,8 +27,17 @@ public class NotesController {
     NotesRepository notesRepository;
 
     @PostMapping("/notes")
-    public String createNotes(@RequestBody NotesDetails notes){
+    public ResponseEntity<?> createNotes(@RequestBody NotesDetails notes, Authentication auth){
         System.out.println("createNotes:: start creating new notes"+notes.getTitle ());
-        return userRepository.saveUser (user);
+        Long userId = -1L;
+        Authentication authentication = SecurityContextHolder.getContext ().getAuthentication ();
+        Object principal = authentication.getPrincipal ();
+        if(principal instanceof UserInfoAuth){
+            userId = ((UserInfoAuth) principal).getUserid ();
+        }
+        logger.info("createNotes:: userId - "+userId);
+        String notesDetails = notesRepository.createNotes (notes, userId );
+        return ResponseEntity.ok (notesDetails);
+
     }
 }
