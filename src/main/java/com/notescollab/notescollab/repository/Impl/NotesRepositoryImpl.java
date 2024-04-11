@@ -27,7 +27,7 @@ public class NotesRepositoryImpl implements NotesRepository {
             PreparedStatement ps = conn.prepareStatement(ADD_NOTES_QUERY, new String[]{"id"});
             ps.setString(1, notes.getTitle ());
             ps.setString ( 2, notes.getDescription ());
-            ps.setString ( 3, notes.getNotesContents ());
+            ps.setString ( 3, notes.getNotescontent ());
             ps.setLong ( 4, userId);
 
             return ps;
