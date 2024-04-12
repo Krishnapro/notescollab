@@ -9,6 +9,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 
 @Repository
 public class NotesRepositoryImpl implements NotesRepository {
@@ -16,7 +17,7 @@ public class NotesRepositoryImpl implements NotesRepository {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    private static final String ADD_NOTES_QUERY = "INSERT INTO public.notes (title,description, notescontent,userid) VALUES(?,?,?,?)";
+    private static final String ADD_NOTES_QUERY = "INSERT INTO public.notes (title,description, notescontent,userid,createdon) VALUES(?,?,?,?,?)";
 
 
     @Override
@@ -29,6 +30,7 @@ public class NotesRepositoryImpl implements NotesRepository {
             ps.setString ( 2, notes.getDescription ());
             ps.setString ( 3, notes.getNotescontent ());
             ps.setLong ( 4, userId);
+            ps.setTimestamp ( 5, new Timestamp ( System.currentTimeMillis () ) );
 
             return ps;
         }, keyHolder);
