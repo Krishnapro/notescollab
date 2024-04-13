@@ -40,4 +40,16 @@ public class NotesController {
         return ResponseEntity.ok (notesDetails);
 
     }
+    @GetMapping("/notes")
+    public ResponseEntity<?> getNotes(){
+        logger.info("getNotes:: get all the notes detail of current user - ");
+        Long userId = -1L;
+        Authentication authentication = SecurityContextHolder.getContext ().getAuthentication ();
+        Object principal = authentication.getPrincipal ();
+        if(principal instanceof UserInfoAuth){
+            userId = ((UserInfoAuth) principal).getUserid ();
+        }
+        NotesDetails notesDetails = notesRepository.getNotesList (userId);
+      return ResponseEntity.ok (notesDetails);
+    }
 }

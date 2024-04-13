@@ -40,4 +40,10 @@ public class NotesRepositoryImpl implements NotesRepository {
 
         return "Notes successfully created with id- " + generatedId;
     }
+
+    @Override
+    public NotesDetails getNotesList(Long userId){
+
+        return null;
+    }
 }
