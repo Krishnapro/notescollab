@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -41,15 +43,20 @@ public class NotesController {
 
     }
     @GetMapping("/notes")
-    public ResponseEntity<?> getNotes(){
+    public ResponseEntity<?> getNotes() throws Exception {
         logger.info("getNotes:: get all the notes detail of current user - ");
         Long userId = -1L;
-        Authentication authentication = SecurityContextHolder.getContext ().getAuthentication ();
-        Object principal = authentication.getPrincipal ();
-        if(principal instanceof UserInfoAuth){
-            userId = ((UserInfoAuth) principal).getUserid ();
+        try {
+            Authentication authentication = SecurityContextHolder.getContext ().getAuthentication ();
+            Object principal = authentication.getPrincipal ();
+            if (principal instanceof UserInfoAuth) {
+                userId = ((UserInfoAuth) principal).getUserid ();
+            }
+            List<NotesDetails> notesDetails = notesRepository.getNotesList ( userId );
+            return ResponseEntity.ok ( notesDetails );
+        }catch (Exception e){
+            logger.error ("getNotes:: Exception while getting notes list"+e.getMessage (),e);
+            return new ResponseEntity<> (e.getMessage (),HttpStatus.BAD_REQUEST);
         }
-        NotesDetails notesDetails = notesRepository.getNotesList (userId);
-      return ResponseEntity.ok (notesDetails);
     }
 }
