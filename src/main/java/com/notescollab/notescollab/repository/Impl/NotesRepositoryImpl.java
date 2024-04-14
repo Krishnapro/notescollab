@@ -28,6 +28,7 @@ public class NotesRepositoryImpl implements NotesRepository {
     private static final String ADD_NOTES_QUERY = "INSERT INTO public.notes (title,description, notescontent,userid,createdon) VALUES(?,?,?,?,?)";
     private static final String GET_NOTES_LIST_QUERY = "select * from notes n where userid = ?";
     private static final String GET_NOTES_BY_ID = "select * from notes n where userid = ? and n.id = ?";
+    private static final String UPDATE_NOTES_BY_ID = "update notes set title = ?,description = ?, notescontent = ?, createdon = ? where id = ? and userid = ?";
 
 
     @Override
@@ -100,9 +101,37 @@ public class NotesRepositoryImpl implements NotesRepository {
             },userId,id);
 
         }catch (Exception e) {
-            logger.error ( "getNotesDetails:: ");
+            logger.error ( "getNotesDetails:: Got exception while getting notes details by id  "+e.getMessage (),e );
             throw new Exception (e.getMessage ());
         }
 
+    }
+
+    @Override
+    public String updateNotesById(NotesDetails notes, Integer id, Long userId) throws Exception {
+        logger.info("updateNotesById:: updating notes details...");
+        try{
+
+            String result = "";
+            Integer rs = jdbcTemplate.update (conn -> {
+                PreparedStatement ps = conn.prepareStatement (UPDATE_NOTES_BY_ID );
+                ps.setString (1, notes.getTitle ());
+                ps.setString (2, notes.getDescription ());
+                ps.setString (3, notes.getNotescontent ());
+                ps.setTimestamp ( 4, new Timestamp ( System.currentTimeMillis() ) );
+                ps.setLong (5, id);
+                ps.setLong ( 6, userId );
+                return ps;
+            });
+
+            if(rs.intValue () != 0){
+                result = "Notes updated successfully!";
+            }
+            return result;
+
+        }catch (Exception e){
+            logger.error("updateNotesById:: Got Exceptin while updating notes by id "+e.getMessage(), e);
+            throw new Exception (e.getMessage ());
+        }
     }
 }

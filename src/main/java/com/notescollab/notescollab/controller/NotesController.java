@@ -61,7 +61,7 @@ public class NotesController {
     }
 
     @GetMapping("/notes/{id}")
-    public ResponseEntity<?> getNotesById(@PathVariable("id") Integer id){
+    public ResponseEntity<?> getNotesById(@PathVariable("id") Integer id) throws Exception{
         logger.info("getNotesById:: start getting notes by id " + id);
         try{
 
@@ -75,6 +75,25 @@ public class NotesController {
 
         }catch (Exception e){
             logger.error("getNotesById:: Got exception while getting notes by id: "+e.getMessage(),e);
+            return new ResponseEntity<> ( e.getMessage (), HttpStatus.BAD_REQUEST );
+        }
+    }
+
+    @PutMapping("/notes/{id}")
+    public ResponseEntity<?> updateNotesById(@RequestBody NotesDetails notesDetails, @PathVariable("id") Integer id) throws Exception{
+        logger.info("updateNotesById:: start updating notes by id " + id);
+        try{
+
+            Long userId = -1L;
+            Authentication authentication = SecurityContextHolder.getContext ().getAuthentication ();
+            Object principal = authentication.getPrincipal ();
+            if (principal instanceof UserInfoAuth) {
+                userId = ((UserInfoAuth) principal).getUserid ();
+            }
+            return  ResponseEntity.ok (notesRepository.updateNotesById (notesDetails , id , userId ));
+
+        }catch (Exception e){
+            logger.error("updateNotesById:: Got exception while updating notes by id: "+e.getMessage(),e);
             return new ResponseEntity<> ( e.getMessage (), HttpStatus.BAD_REQUEST );
         }
     }
