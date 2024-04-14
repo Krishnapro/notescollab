@@ -27,6 +27,7 @@ public class NotesRepositoryImpl implements NotesRepository {
 
     private static final String ADD_NOTES_QUERY = "INSERT INTO public.notes (title,description, notescontent,userid,createdon) VALUES(?,?,?,?,?)";
     private static final String GET_NOTES_LIST_QUERY = "select * from notes n where userid = ?";
+    private static final String GET_NOTES_BY_ID = "select * from notes n where userid = ? and n.id = ?";
 
 
     @Override
@@ -81,5 +82,27 @@ public class NotesRepositoryImpl implements NotesRepository {
             logger.info ( "getNotesList:: closing connection ..." );
             conn.close();
         }
+    }
+
+    @Override
+    public NotesDetails getNotesById(Integer id, Long userId) throws Exception {
+        logger.info ( "getNotesDetails:: getting notes details");
+        try {
+            return jdbcTemplate.queryForObject ( GET_NOTES_BY_ID, (rs , rowNum) -> {
+                return new NotesDetails (
+                        rs.getLong ( "id"),
+                        rs.getString ( "title" ),
+                        rs.getString ( "description" ),
+                        rs.getString ( "notescontent"),
+                        rs.getTimestamp ( "createdon" )
+                );
+
+            },userId,id);
+
+        }catch (Exception e) {
+            logger.error ( "getNotesDetails:: ");
+            throw new Exception (e.getMessage ());
+        }
+
     }
 }

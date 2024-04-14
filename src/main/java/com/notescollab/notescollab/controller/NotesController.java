@@ -59,4 +59,23 @@ public class NotesController {
             return new ResponseEntity<> (e.getMessage (),HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/notes/{id}")
+    public ResponseEntity<?> getNotesById(@PathVariable("id") Integer id){
+        logger.info("getNotesById:: start getting notes by id " + id);
+        try{
+
+            Long userId = -1L;
+            Authentication authentication = SecurityContextHolder.getContext ().getAuthentication ();
+            Object principal = authentication.getPrincipal ();
+            if (principal instanceof UserInfoAuth) {
+                userId = ((UserInfoAuth) principal).getUserid ();
+            }
+            return  ResponseEntity.ok (notesRepository.getNotesById (id , userId));
+
+        }catch (Exception e){
+            logger.error("getNotesById:: Got exception while getting notes by id: "+e.getMessage(),e);
+            return new ResponseEntity<> ( e.getMessage (), HttpStatus.BAD_REQUEST );
+        }
+    }
 }
