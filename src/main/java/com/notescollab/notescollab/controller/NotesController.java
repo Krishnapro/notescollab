@@ -97,4 +97,24 @@ public class NotesController {
             return new ResponseEntity<> ( e.getMessage (), HttpStatus.BAD_REQUEST );
         }
     }
+
+    @DeleteMapping("/notes/{id}")
+    public ResponseEntity<?> deleteNotesById(@PathVariable("id") Integer id) throws Exception {
+        logger.info("deleteNotesById:: Deleting notes by id " + id);
+        try{
+
+            Long userId = -1L;
+            Authentication authentication = SecurityContextHolder.getContext ().getAuthentication ();
+            Object principal = authentication.getPrincipal ();
+            if (principal instanceof UserInfoAuth) {
+                userId = ((UserInfoAuth) principal).getUserid ();
+            }
+
+            return ResponseEntity.ok(notesRepository.deleteNotesById(id, userId));
+
+        }catch(Exception e){
+            logger.error("deleteNotesById: Got exception while deleting notes"+e.getMessage(),e);
+            return new ResponseEntity<>(e.getMessage (), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

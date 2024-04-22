@@ -11,4 +11,5 @@ public interface NotesRepository {
  NotesDetails getNotesById(Integer id, Long userId) throws Exception;
 
  String updateNotesById(NotesDetails notesDetails, Integer id, Long userId) throws Exception;
+ String deleteNotesById(Integer id, Long userId) throws Exception;
 }

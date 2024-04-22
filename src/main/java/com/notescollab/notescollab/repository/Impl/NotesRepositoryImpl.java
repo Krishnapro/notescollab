@@ -30,6 +30,7 @@ public class NotesRepositoryImpl implements NotesRepository {
     private static final String GET_NOTES_BY_ID = "select * from notes n where userid = ? and n.id = ?";
     private static final String UPDATE_NOTES_BY_ID = "update notes set title = ?,description = ?, notescontent = ?, createdon = ? where id = ? and userid = ?";
 
+    private static final String DELETE_NOTES_BY_ID = "DELETE FROM notes where id =? and userid = ?";
 
     @Override
     public String createNotes(NotesDetails notes, Long userId) {
@@ -132,6 +133,27 @@ public class NotesRepositoryImpl implements NotesRepository {
         }catch (Exception e){
             logger.error("updateNotesById:: Got Exceptin while updating notes by id "+e.getMessage(), e);
             throw new Exception (e.getMessage ());
+        }
+    }
+
+    @Override
+    public String deleteNotesById(Integer id, Long userId) throws Exception {
+        logger.info("deleteNotesById:: deleting notes by id "+id);
+        try {
+            String result = "";
+            Integer rs = jdbcTemplate.update (conn -> {
+                PreparedStatement ps = conn.prepareStatement (DELETE_NOTES_BY_ID);
+                ps.setInt ( 1, id );
+                ps.setLong ( 2, userId );
+                return ps;
+            });
+            if(rs.intValue () != 0){
+                result = "Notes deleted successfully";
+            }
+            return result;
+        }catch (Exception e){
+            logger.error("deleteNotesById:: Got exceptiono while deleting notes"+e.getMessage(),e);
+            throw new Exception(e.getMessage ());
         }
     }
 }
