@@ -5,6 +5,7 @@ import com.notescollab.notescollab.entity.NotesDetails;
 import com.notescollab.notescollab.entity.UserInfoAuth;
 import com.notescollab.notescollab.repository.NotesRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.websocket.server.PathParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,6 +115,26 @@ public class NotesController {
 
         }catch(Exception e){
             logger.error("deleteNotesById: Got exception while deleting notes"+e.getMessage(),e);
+            return new ResponseEntity<>(e.getMessage (), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchNotes(@PathParam ("query") String query) throws Exception {
+        logger.info("searchNotes:: search notes ");
+        try{
+
+            Long userId = -1L;
+            Authentication authentication = SecurityContextHolder.getContext ().getAuthentication ();
+            Object principal = authentication.getPrincipal ();
+            if (principal instanceof UserInfoAuth) {
+                userId = ((UserInfoAuth) principal).getUserid ();
+            }
+
+            return ResponseEntity.ok(null);
+
+        }catch(Exception e){
+            logger.error("searchNotes: Got exception while searching notes"+e.getMessage(),e);
             return new ResponseEntity<>(e.getMessage (), HttpStatus.BAD_REQUEST);
         }
     }
