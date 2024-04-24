@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,8 @@ public class NotesRepositoryImpl implements NotesRepository {
     private static final String UPDATE_NOTES_BY_ID = "update notes set title = ?,description = ?, notescontent = ?, createdon = ? where id = ? and userid = ?";
 
     private static final String DELETE_NOTES_BY_ID = "DELETE FROM notes where id =? and userid = ?";
+
+    private static final String SEARCH_NOTES = "select * from notes n where userid = ? and title like ?";
 
     @Override
     public String createNotes(NotesDetails notes, Long userId) {
@@ -153,6 +156,39 @@ public class NotesRepositoryImpl implements NotesRepository {
             return result;
         }catch (Exception e){
             logger.error("deleteNotesById:: Got exceptiono while deleting notes"+e.getMessage(),e);
+            throw new Exception(e.getMessage ());
+        }
+    }
+
+    @Override
+    public List<NotesDetails> searchNotes(String searchkey, Long userId) throws Exception {
+        logger.info("searchNotes:: searching notes by key " + searchkey);
+        Connection conn = jdbcTemplate.getDataSource ().getConnection ();
+        try{
+            List<NotesDetails> notesList = new ArrayList<>();
+            String likeKey = "%" + searchkey + "%";
+
+            PreparedStatement ps = conn.prepareStatement(SEARCH_NOTES);
+            ps.setLong ( 1, userId);
+            ps.setString ( 2, likeKey );
+            ResultSet rs  = ps.executeQuery();
+            while(rs.next()) {
+                NotesDetails notesDetails = new NotesDetails();
+
+                notesDetails.setId ( rs.getLong ( "id" ) );
+                notesDetails.setTitle ( rs.getString ( "title" ) );
+                notesDetails.setDescription ( rs.getString ( "description" ) );
+                notesDetails.setNotescontent ( rs.getString ( "notescontent" ) );
+                notesDetails.setCreatedon ( rs.getTimestamp ( "createdon") );
+
+                notesList.add ( notesDetails );
+
+            }
+
+            return notesList;
+
+        }catch (Exception e){
+            logger.error("searchNotes:: Got exception while searching notes"+e.getMessage(),e);
             throw new Exception(e.getMessage ());
         }
     }

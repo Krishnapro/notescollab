@@ -12,4 +12,7 @@ public interface NotesRepository {
 
  String updateNotesById(NotesDetails notesDetails, Integer id, Long userId) throws Exception;
  String deleteNotesById(Integer id, Long userId) throws Exception;
+
+ List<NotesDetails> searchNotes(String searchKey, Long userId) throws Exception;
+
 }

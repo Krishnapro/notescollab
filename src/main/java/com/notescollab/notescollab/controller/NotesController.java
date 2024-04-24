@@ -131,7 +131,7 @@ public class NotesController {
                 userId = ((UserInfoAuth) principal).getUserid ();
             }
 
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok(notesRepository.searchNotes ( query, userId ));
 
         }catch(Exception e){
             logger.error("searchNotes: Got exception while searching notes"+e.getMessage(),e);
