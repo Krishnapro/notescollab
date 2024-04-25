@@ -138,4 +138,23 @@ public class NotesController {
             return new ResponseEntity<>(e.getMessage (), HttpStatus.BAD_REQUEST);
         }
     }
+    @PostMapping("/notes/{id}/share")
+    public ResponseEntity<?> shareNotes(@PathVariable("id") Integer id) throws Exception {
+
+        try{
+            Long userId = -1L;
+            Authentication authentication = SecurityContextHolder.getContext ().getAuthentication ();
+            Object principal = authentication.getPrincipal ();
+            if (principal instanceof UserInfoAuth) {
+                userId = ((UserInfoAuth) principal).getUserid ();
+            }
+
+            return ResponseEntity.ok(null);
+
+        }catch(Exception e){
+            logger.error("shareNotes:: Got Exception while sharing notes "+e.getMessage (), e);
+            return new ResponseEntity<>(e.getMessage (), HttpStatus.BAD_REQUEST);
+        }
+
+    }
 }
