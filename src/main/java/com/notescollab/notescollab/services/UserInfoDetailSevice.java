@@ -29,18 +29,23 @@ public class UserInfoDetailSevice implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         logger.info("Loading user:: load user by username"+username);
+        try {
 
-        Optional<MyUser> userInfo = userSecurityRepository.findByUsername(username);
+            Optional<MyUser> userInfo = userSecurityRepository.findByUsername ( username );
 //        Optional<MyUser> userInfo = userRepository.findByUsername(username);
-        logger.info ( "user detail "+userInfo );
-        if(userInfo.isPresent ()){
-            MyUser user = userInfo.get ();
-            logger.info ( "user password ====="+user.getPassword () );
+            logger.info ( "user detail " + userInfo );
+            if (userInfo.isPresent ()) {
+                MyUser user = userInfo.get ();
+                logger.info ( "user password =====" + user.getPassword () );
 
-            return new UserInfoAuth ( user );
-        }else {
-            logger.info ( "Got Exception while authenticate user: "+username);
-            throw new UsernameNotFoundException ("MyUser not found"+username );
+                return new UserInfoAuth ( user );
+            } else {
+                logger.error ( "Got Exception while authenticate user: " + username );
+                throw new UsernameNotFoundException ( "User not found" + username );
+            }
+        }catch (Exception e){
+            logger.error ( "Got Exception while authenticate user"+e.getMessage (),e);
+            throw new UsernameNotFoundException (e.getMessage ());
         }
 
     }

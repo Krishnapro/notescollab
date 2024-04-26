@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface UserRepository {
 
-    MyUser getUserById(Long userid);
+    MyUser getUserById(Long userid) throws Exception;
     String saveUser(MyUser user);
     String loginUser(MyUser user);
 

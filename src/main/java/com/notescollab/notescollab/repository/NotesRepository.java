@@ -15,4 +15,6 @@ public interface NotesRepository {
 
  List<NotesDetails> searchNotes(String searchKey, Long userId) throws Exception;
 
+
+
 }

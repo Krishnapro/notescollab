@@ -5,6 +5,7 @@ import com.notescollab.notescollab.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,20 +29,19 @@ public class UserController {
     }
     @GetMapping("/getuserdetails/{userid}")
     @PreAuthorize ("hasRole('ROLE_USER')")
-    public ResponseEntity<?> getUserDetails(@PathVariable("userid") Long userid) throws Throwable {
+    public ResponseEntity<?> getUserDetails(@PathVariable("userid") Long userid) throws Exception {
         try {
 
             logger.info ( "Getting user details..." + userid );
             MyUser user = userRepository.getUserById ( userid );
-            if(user == null){
+            if(user == null ){
                 throw new UsernameNotFoundException ( "user " + userid + " does not found");
             }
             return ResponseEntity.ok (user);
-        }catch (UsernameNotFoundException e) {
-            throw e;
+
         }catch(Exception e){
             logger.info("getUserDetails:: Exception while getting user details"+e.getMessage(),e);
-            return ResponseEntity.ok ("MyUser "+userid+" does not found");
+            return new ResponseEntity<> (e.getMessage (), HttpStatus.BAD_REQUEST );
 
         }
     }

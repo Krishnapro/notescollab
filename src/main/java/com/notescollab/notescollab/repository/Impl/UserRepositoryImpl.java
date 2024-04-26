@@ -5,6 +5,7 @@ import com.notescollab.notescollab.repository.UserRepository;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -31,10 +32,10 @@ public class UserRepositoryImpl implements UserRepository {
     private static final String ADD_USER_QUERY = "INSERT INTO public.users (username,password, fullname, emailid) VALUES(?,?,?,?)";
 
     @Override
-    public MyUser getUserById(Long userId) {
+    public MyUser getUserById(Long userId) throws Exception {
         logger.info("getUserById:: start getting user Details by userid-"+userId);
         try {
-            return jdbcTemplate.queryForObject ( GET_USER_BYID_QUERY, (resultSet, rowNum) -> {
+            MyUser user = jdbcTemplate.queryForObject ( GET_USER_BYID_QUERY, (resultSet, rowNum) -> {
                 return new MyUser (
                         resultSet.getLong ( "userid" ),
                         resultSet.getString ( "username" ),
@@ -45,8 +46,15 @@ public class UserRepositoryImpl implements UserRepository {
                 );
 
             }, userId );
-        }catch(UsernameNotFoundException e){
-            throw new UsernameNotFoundException ("Got exception while getting user information"+e.getMessage (),e);
+
+            return user;
+        }catch (EmptyResultDataAccessException ac){
+            logger.error("getUserById:: Got exception while getting user details"+ac.getMessage(),ac);
+            throw new Exception ("User not found with id " + userId);
+
+        } catch(Exception e){
+            logger.info("getUserById:: Got exception while getting user details"+e.getMessage (),e);
+            throw new Exception (e.getMessage ());
         }
     }
     @Override
