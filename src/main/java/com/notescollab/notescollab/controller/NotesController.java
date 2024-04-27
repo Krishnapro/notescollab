@@ -4,6 +4,7 @@ import com.notescollab.notescollab.entity.MyUser;
 import com.notescollab.notescollab.entity.NotesDetails;
 import com.notescollab.notescollab.entity.UserInfoAuth;
 import com.notescollab.notescollab.repository.NotesRepository;
+import com.notescollab.notescollab.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.websocket.server.PathParam;
 import org.slf4j.Logger;
@@ -28,6 +29,9 @@ public class NotesController {
 
     @Autowired
     NotesRepository notesRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @PostMapping("/notes")
     public ResponseEntity<?> createNotes(@RequestBody NotesDetails notes, Authentication auth){
@@ -139,7 +143,7 @@ public class NotesController {
         }
     }
     @PostMapping("/notes/{id}/share")
-    public ResponseEntity<?> shareNotes(@PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<?> shareNotes(@PathVariable("id") Integer id, @RequestParam("userid") Long shareUserid) throws Exception {
 
         try{
             Long userId = -1L;
@@ -149,6 +153,15 @@ public class NotesController {
                 userId = ((UserInfoAuth) principal).getUserid ();
             }
 
+            NotesDetails note = notesRepository.getNotesById (id, userId);
+            if(note == null){
+                return ResponseEntity.status ( HttpStatus.FORBIDDEN ).body ( "you don't have permission to share this notes!" );
+            }
+
+            MyUser user = userRepository.getUserById (shareUserid );
+            if(user == null) {
+                return ResponseEntity.status ( HttpStatus.NOT_FOUND ).body ( "User with id "+shareUserid+" does not exits!" );
+            }
             return ResponseEntity.ok(null);
 
         }catch(Exception e){
