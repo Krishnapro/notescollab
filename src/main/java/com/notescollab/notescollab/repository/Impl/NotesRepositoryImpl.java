@@ -29,7 +29,7 @@ public class NotesRepositoryImpl implements NotesRepository {
     private static final String ADD_NOTES_QUERY = "INSERT INTO public.notes (title,description, notescontent,userid,createdon) VALUES(?,?,?,?,?)";
     private static final String GET_NOTES_LIST_QUERY = "select * from notes n where userid = ?";
     private static final String GET_NOTES_BY_ID = "select * from notes n where userid = ? and n.id = ?";
-    private static final String UPDATE_NOTES_BY_ID = "update notes set title = ?,description = ?, notescontent = ?, createdon = ? where id = ? and userid = ?";
+    private static final String UPDATE_NOTES_BY_ID = "update notes set title = ?,description = ?, notescontent = ?, updatedon = ? where id = ? and userid = ?";
 
     private static final String DELETE_NOTES_BY_ID = "DELETE FROM notes where id =? and userid = ?";
 
