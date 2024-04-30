@@ -162,7 +162,7 @@ public class NotesController {
             if(user == null) {
                 return ResponseEntity.status ( HttpStatus.NOT_FOUND ).body ( "User with id "+shareUserid+" does not exits!" );
             }
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok(notesRepository.shareNote ( id, userId, shareUserid ));
 
         }catch(Exception e){
             logger.error("shareNotes:: Got Exception while sharing notes "+e.getMessage (), e);

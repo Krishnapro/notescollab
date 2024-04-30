@@ -14,6 +14,7 @@ public interface NotesRepository {
  String deleteNotesById(Integer id, Long userId) throws Exception;
 
  List<NotesDetails> searchNotes(String searchKey, Long userId) throws Exception;
+String shareNote(Integer id, Long userId, Long sharewithId) throws Exception;
 
 
 

@@ -192,4 +192,33 @@ public class NotesRepositoryImpl implements NotesRepository {
             throw new Exception(e.getMessage ());
         }
     }
+
+    @Override
+    public String shareNote(Integer id, Long userid, Long sharewithId) throws Exception{
+        logger.info("shareNote:: start sharing note with user - "+userid);
+        try {
+            String sql = "insert into share_notes (noteid, share_with_user, share_by, share_at) values(?,?,?, ?)";
+
+            KeyHolder keyHolder = new GeneratedKeyHolder ();
+            jdbcTemplate.update ( conn ->{
+                PreparedStatement ps = conn.prepareStatement(sql, new String[]{"shareid"});
+                ps.setInt ( 1, id );
+                ps.setLong ( 2, sharewithId );
+                ps.setLong ( 3,  userid );
+                ps.setTimestamp ( 4, new Timestamp (System.currentTimeMillis () ) );
+
+                return ps;
+
+            }, keyHolder );
+
+            Integer generatedShareId = keyHolder.getKey ().intValue ();
+
+            return "Note successfully shared with " + sharewithId;
+
+        }catch (Exception e) {
+            logger.error("shareNote:: Got exception while sharing note "+e.getMessage(),e);
+            throw new Exception(e.getMessage ());
+        }
+
+    }
 }
