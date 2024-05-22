@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -36,9 +37,17 @@ public class SecurityConfig {
                         .requestMatchers ( "/api/greeting" ).permitAll ()
                         .anyRequest ()
                         .authenticated ())
-                .httpBasic ( Customizer.withDefaults ())
-                .formLogin (Customizer.withDefaults ()).csrf ( AbstractHttpConfigurer::disable )
-                .exceptionHandling (Customizer.withDefaults ());
+                .httpBasic (Customizer.withDefaults () )
+                .formLogin (form ->  form
+                        .loginPage ("/login")
+                        .failureHandler ( customAuthenticationFailureHandler () )).csrf ( AbstractHttpConfigurer::disable )
+                .exceptionHandling (exception -> exception.authenticationEntryPoint (
+                        (request, response, authException) -> {
+                            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+//                            response.setContentType("application/json");
+                            response.getWriter().write("Authentication Failed: Username/Password is invalid");
+                        }
+                ));
 
         return http.build();
 
@@ -56,6 +65,10 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder ();
     }
 
+    @Bean
+    public CustomAuthenticationFailureHandler customAuthenticationFailureHandler(){
+        return new CustomAuthenticationFailureHandler();
+    }
     @Bean
     public AuthenticationProvider authenticationProvider() {
         logger.info("AuthenticationProvider:: start authentication");
