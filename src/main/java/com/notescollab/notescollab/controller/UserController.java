@@ -47,9 +47,14 @@ public class UserController {
     }
 
     @PostMapping("/auth/signup")
-    public String addUser(@RequestBody MyUser user){
-        System.out.println("*********start adding new user"+user.getUsername ());
-        return userRepository.saveUser (user);
+    public ResponseEntity<?> createUser(@RequestBody MyUser user) throws Exception {
+        logger.info("createUser:: start creating new user");
+        try {
+            return ResponseEntity.ok (userRepository.saveUser ( user ));
+        }catch (Exception e) {
+            logger.error("createUser:: Got exception while creating user "+e.getMessage (),e);
+            return new ResponseEntity<> (e.getMessage (),HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

@@ -29,7 +29,7 @@ public class UserRepositoryImpl implements UserRepository {
     private Logger logger = LoggerFactory.getLogger ("com.notescollab.notescollab.repository.Impl.UserRepositoryImpl");
     private static final String GET_USER_BYID_QUERY = "SELECT * FROM public.users WHERE userid = ?";
     private static final String GET_USER_BYUSERNAME_QUERY = "SELECT * FROM public.users WHERE username = ?";
-    private static final String ADD_USER_QUERY = "INSERT INTO public.users (username,password, fullname, emailid) VALUES(?,?,?,?)";
+    private static final String ADD_USER_QUERY = "INSERT INTO public.users (username,password, fullname, emailid, roles) VALUES(?,?,?,?,?)";
 
     @Override
     public MyUser getUserById(Long userId) throws Exception {
@@ -68,6 +68,7 @@ public class UserRepositoryImpl implements UserRepository {
                     ps.setString ( 2, encryptPwd);
                     ps.setString ( 3, user.getFullname ());
                     ps.setString ( 4, user.getEmailid ());
+                    ps.setString ( 5, user.getRoles () );
 
                     return ps;
         }, keyHolder);
@@ -75,7 +76,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         int generatedId = keyHolder.getKey().intValue ();
 
-        return "MyUser successfully created " + generatedId;
+        return "User \""+ user.getFullname () +"\" successfully created ";
 
     }
 
