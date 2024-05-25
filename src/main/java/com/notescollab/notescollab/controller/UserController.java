@@ -50,6 +50,12 @@ public class UserController {
     public ResponseEntity<?> createUser(@RequestBody MyUser user) throws Exception {
         logger.info("createUser:: start creating new user");
         try {
+            var retrieveUser = userRepository.findByUsernameAndEmail(user.getUsername(), user.getEmailid());
+            if (retrieveUser.isPresent()) {
+                logger.error("createUser:: Got exception while creating user");
+                return new ResponseEntity<>("User with this username and email already exists.", HttpStatus.CONFLICT);
+            }
+
             return ResponseEntity.ok (userRepository.saveUser ( user ));
         }catch (Exception e) {
             logger.error("createUser:: Got exception while creating user "+e.getMessage (),e);
