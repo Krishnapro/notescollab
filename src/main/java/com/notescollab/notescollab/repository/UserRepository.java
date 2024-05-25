@@ -12,4 +12,5 @@ public interface UserRepository {
     String loginUser(MyUser user);
 
     Optional<MyUser> findByUsername(String username);
+    Optional<MyUser> findByUsernameAndEmail(String username, String emailid);
 }
