@@ -28,6 +28,7 @@ public class UserRepositoryImpl implements UserRepository {
     private Logger logger = LoggerFactory.getLogger ("com.notescollab.notescollab.repository.Impl.UserRepositoryImpl");
     private static final String GET_USER_BYID_QUERY = "SELECT * FROM public.users WHERE userid = ?";
     private static final String GET_USER_BYUSERNAME_QUERY = "SELECT * FROM public.users WHERE username = ?";
+    private static final String GET_USER_BYEMAIL_QUERY = "SELECT * FROM public.users WHERE emailid = ?";
     private static final String GET_USER_BYUSERNAME_AND_EMAIL_QUERY = "SELECT * FROM public.users WHERE username = ? AND emailid = ?";
     private static final String ADD_USER_QUERY = "INSERT INTO public.users (username,password, fullname, emailid, roles) VALUES(?,?,?,?,?)";
 
@@ -88,18 +89,47 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<MyUser> findByUsername(String username) {
-        logger.info("findByUsername:: username-"+username);
-        return Optional.ofNullable ( jdbcTemplate.queryForObject ( GET_USER_BYUSERNAME_QUERY, (resultSet, rowNum) -> {
-            return new MyUser (
-                    resultSet.getLong("userid"),
-                    resultSet.getString("username"),
-                    resultSet.getString("password"),
-                    resultSet.getString("fullname"),
-                    resultSet.getString("emailid"),
-                    resultSet.getString ( "roles")
+        logger.info("findByUsername:: username-" + username);
+        try {
+            var user = jdbcTemplate.queryForObject(
+                    GET_USER_BYUSERNAME_QUERY,
+                    (resultSet, rowNum) -> new MyUser(
+                            resultSet.getLong("userid"),
+                            resultSet.getString("username"),
+                            resultSet.getString("password"),
+                            resultSet.getString("fullname"),
+                            resultSet.getString("emailid"),
+                            resultSet.getString("roles")
+                    ),
+                    username
             );
-        }, username ) );
+            return Optional.ofNullable(user);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
 
+    }
+
+    @Override
+    public Optional<MyUser> findByEmail(String emailid) {
+        logger.info("findByEmail:: emailid-" + emailid);
+        try {
+            var user = jdbcTemplate.queryForObject(
+                    GET_USER_BYEMAIL_QUERY,
+                    (resultSet, rowNum) -> new MyUser(
+                            resultSet.getLong("userid"),
+                            resultSet.getString("username"),
+                            resultSet.getString("password"),
+                            resultSet.getString("fullname"),
+                            resultSet.getString("emailid"),
+                            resultSet.getString("roles")
+                    ),
+                    emailid
+            );
+            return Optional.ofNullable(user);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
