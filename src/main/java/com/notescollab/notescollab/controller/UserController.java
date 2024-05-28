@@ -50,6 +50,11 @@ public class UserController {
     public ResponseEntity<?> createUser(@RequestBody MyUser user) throws Exception {
         logger.info("createUser:: start creating new user");
         try {
+            if (checkIfUserAlreadyExists(user)) {
+                logger.error("createUser:: Got exception while creating user");
+                return new ResponseEntity<>("User with this username and/or email already exists.", HttpStatus.CONFLICT);
+            }
+
             return ResponseEntity.ok (userRepository.saveUser ( user ));
         }catch (Exception e) {
             logger.error("createUser:: Got exception while creating user "+e.getMessage (),e);
@@ -57,4 +62,16 @@ public class UserController {
         }
     }
 
+    /**
+     * Helper method to check wether user with given username and/or email already exists in the database
+     * @param user the User Entity
+     * @return {@code true} if user already exists, {@code false} otherwise
+     */
+    private boolean checkIfUserAlreadyExists(MyUser user) {
+        var username = userRepository.findByUsername(user.getUsername());
+        var email = userRepository.findByEmail(user.getEmailid());
+        var usernameAndEmail = userRepository.findByUsernameAndEmail(user.getUsername(), user.getEmailid());
+
+        return username.isPresent() || email.isPresent() || usernameAndEmail.isPresent();
+    }
 }
