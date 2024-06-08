@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,11 +40,12 @@ public class SecurityConfig {
                 .httpBasic (Customizer.withDefaults () )
                 .formLogin (form ->  form
                         .loginPage ("/login")
-                        .failureHandler ( customAuthenticationFailureHandler () )).csrf ( AbstractHttpConfigurer::disable )
+                        .failureHandler ( customAuthenticationFailureHandler () ))
+                .csrf ( AbstractHttpConfigurer::disable )
+                .sessionManagement (session -> session.sessionCreationPolicy ( SessionCreationPolicy.STATELESS))
                 .exceptionHandling (exception -> exception.authenticationEntryPoint (
                         (request, response, authException) -> {
                             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-//                            response.setContentType("application/json");
                             response.getWriter().write("Authentication Failed: Username/Password is invalid");
                         }
                 ));
