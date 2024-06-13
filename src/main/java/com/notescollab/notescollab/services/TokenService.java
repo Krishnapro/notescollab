@@ -1,5 +1,6 @@
 package com.notescollab.notescollab.services;
 
+import com.notescollab.notescollab.entity.MyUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,16 +23,16 @@ public class TokenService {
     public TokenService(JwtEncoder encoder) {
         this.encoder = encoder;
     }
-    public String generateToken(Authentication authentication){
+    public String generateToken(/*Authentication authentication*/ MyUser user){
         Instant now = Instant.now ();
-        String scope = authentication.getAuthorities ().stream ()
+        String scope = user.getRoles ();/*authentication.getAuthorities ().stream ()
                 .map ( GrantedAuthority::getAuthority)
-                .collect( Collectors.joining(" "));
+                .collect( Collectors.joining(" "));*/
         JwtClaimsSet claims = JwtClaimsSet.builder ()
                 .issuer("self")
                 .issuedAt (now)
                 .expiresAt (now.plus(1, ChronoUnit.HOURS))
-                .subject (authentication.getName ())
+                .subject (/*authentication.getName ()*/ user.getFullname ())
                 .claim("roles", scope)
                 .build ();
         return this.encoder.encode ( JwtEncoderParameters.from (claims)).getTokenValue ();

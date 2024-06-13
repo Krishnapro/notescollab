@@ -106,6 +106,11 @@ public class SecurityConfig {
 
     }
 
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationProvider authenticationProvider) {
+        return new ProviderManager (authenticationProvider);
+    }
+
     @ConfigurationProperties(prefix = "rsa")
     public record RsaKeyProperties(RSAPublicKey publicKey, RSAPrivateKey privateKey){
 
