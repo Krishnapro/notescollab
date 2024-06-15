@@ -45,7 +45,7 @@ git checkout -b <your_branch_name>
 8. Perfom your desired changes to the code base.
 
 <p align="center">
- <img width="70%" height="30%" alt="Developer's life" src="https://i.postimg.cc/Fs75yYVT/giphy.gif">
+ <img width="30%" height="10%" alt="Developer's life" src="https://i.postimg.cc/Fs75yYVT/giphy.gif">
 </p>
 
 <!--[![giphy.gif](https://i.postimg.cc/Fs75yYVT/giphy.gif)](https://postimg.cc/jL0FKd9f)-->
