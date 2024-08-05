@@ -1,7 +1,8 @@
-package com.notescollab.notescollab.repository;
+package com.notescollab.repository;
 
-import com.notescollab.notescollab.entity.MyUser;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.notescollab.entity.MyUser;
 
 import java.util.Optional;
 

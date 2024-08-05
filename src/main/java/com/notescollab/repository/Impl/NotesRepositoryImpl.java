@@ -1,7 +1,8 @@
-package com.notescollab.notescollab.repository.Impl;
+package com.notescollab.repository.Impl;
 
-import com.notescollab.notescollab.entity.NotesDetails;
-import com.notescollab.notescollab.repository.NotesRepository;
+import com.notescollab.entity.NotesDetails;
+import com.notescollab.repository.NotesRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
