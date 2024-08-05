@@ -1,6 +1,6 @@
-package com.notescollab.notescollab;
+package com.notescollab;
 
-import com.notescollab.notescollab.config.SecurityConfig;
+import com.notescollab.config.SecurityConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

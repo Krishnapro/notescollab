@@ -1,4 +1,4 @@
-package com.notescollab.notescollab.entity;
+package com.notescollab.entity;
 
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

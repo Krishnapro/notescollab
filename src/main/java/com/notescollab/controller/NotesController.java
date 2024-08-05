@@ -1,10 +1,11 @@
-package com.notescollab.notescollab.controller;
+package com.notescollab.controller;
 
-import com.notescollab.notescollab.entity.MyUser;
-import com.notescollab.notescollab.entity.NotesDetails;
-import com.notescollab.notescollab.entity.UserInfoAuth;
-import com.notescollab.notescollab.repository.NotesRepository;
-import com.notescollab.notescollab.repository.UserRepository;
+import com.notescollab.entity.MyUser;
+import com.notescollab.entity.NotesDetails;
+import com.notescollab.entity.UserInfoAuth;
+import com.notescollab.repository.NotesRepository;
+import com.notescollab.repository.UserRepository;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.websocket.server.PathParam;
 import org.slf4j.Logger;

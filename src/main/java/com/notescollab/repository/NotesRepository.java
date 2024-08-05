@@ -1,8 +1,8 @@
-package com.notescollab.notescollab.repository;
-
-import com.notescollab.notescollab.entity.NotesDetails;
+package com.notescollab.repository;
 
 import java.util.List;
+
+import com.notescollab.entity.NotesDetails;
 
 public interface NotesRepository {
 

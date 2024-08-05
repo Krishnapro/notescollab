@@ -1,7 +1,8 @@
-package com.notescollab.notescollab.controller;
+package com.notescollab.controller;
 
-import com.notescollab.notescollab.entity.MyUser;
-import com.notescollab.notescollab.repository.UserRepository;
+import com.notescollab.entity.MyUser;
+import com.notescollab.repository.UserRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,10 @@
-package com.notescollab.notescollab.services;
+package com.notescollab.services;
 
-import com.notescollab.notescollab.entity.MyUser;
-import com.notescollab.notescollab.entity.UserInfoAuth;
-import com.notescollab.notescollab.repository.UserRepository;
-import com.notescollab.notescollab.repository.UserSecurityRepository;
+import com.notescollab.entity.MyUser;
+import com.notescollab.entity.UserInfoAuth;
+import com.notescollab.repository.UserRepository;
+import com.notescollab.repository.UserSecurityRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
-package com.notescollab.notescollab.repository;
-
-import com.notescollab.notescollab.entity.MyUser;
+package com.notescollab.repository;
 
 import java.util.Optional;
+
+import com.notescollab.entity.MyUser;
 
 
 public interface UserRepository {

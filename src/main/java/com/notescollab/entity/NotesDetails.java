@@ -1,4 +1,4 @@
-package com.notescollab.notescollab.entity;
+package com.notescollab.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

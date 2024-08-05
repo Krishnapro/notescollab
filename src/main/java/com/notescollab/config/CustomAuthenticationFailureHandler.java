@@ -1,4 +1,4 @@
-package com.notescollab.notescollab.config;
+package com.notescollab.config;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
